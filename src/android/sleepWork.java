@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Wolfgang Koller
+ * Copyright Wolfgang Koller (original work: https://github.com/Viras-/cordova-plugin-powermanagement) & Moin Uddin
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
  */
 
 /**
- * Cordova (Android) plugin for accessing the power-management functions of the device
- * @author Wolfgang Koller <viras@users.sourceforge.net>
+ * Cordova (Android) plugin for making the app run even in device's sleep mode
+ * @author Moin Uddin <me@moin.im>
  */
-package org.apache.cordova.powermanagement;
+
+package org.apache.cordova.sleepwork;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,7 @@ import org.apache.cordova.PluginResult.Status;
 /**
  * Plugin class which does the actual handling
  */
-public class PowerManagement extends CordovaPlugin {
+public class SleepWorker extends CordovaPlugin {
 	// As we only allow one wake-lock, we keep a reference to it here
 	private PowerManager.WakeLock wakeLock = null;
 	private PowerManager powerManager = null;
@@ -53,22 +54,16 @@ public class PowerManagement extends CordovaPlugin {
 	}
 	
 	@Override
-	public boolean execute(String action, JSONArray args,
-			CallbackContext callbackContext) throws JSONException {
+	public boolean execute(String action, CallbackContext callbackContext) throws JSONException {
 
 		PluginResult result = null;
-		Log.d("PowerManagementPlugin", "Plugin execute called - " + this.toString() );
-		Log.d("PowerManagementPlugin", "Action is " + action );
-		
+		Log.d("sleepWork", "Plugin execute called - " + this.toString() );
+		Log.d("sleepWork", "Action is " + action );
+
 		try {
 			if( action.equals("acquire") ) {
-					if( args.length() > 0 && args.getBoolean(0) ) {
-						Log.d("PowerManagementPlugin", "Only dim lock" );
-						result = this.acquire( PowerManager.SCREEN_DIM_WAKE_LOCK );
-					}
-					else {
-						result = this.acquire( PowerManager.FULL_WAKE_LOCK );
-					}
+				result = this.acquire( PowerManager.PARTIAL_WAKE_LOCK );
+				Log.d("sleepWork", "sleepWork enabled" );
 			}
 			else if( action.equals("release") ) {
 				result = this.release();
@@ -87,22 +82,23 @@ public class PowerManagement extends CordovaPlugin {
 	 * @param p_flags Type of wake-lock to acquire
 	 * @return PluginResult containing the status of the acquire process
 	 */
+
 	private PluginResult acquire( int p_flags ) {
 		PluginResult result = null;
 		
 		if (this.wakeLock == null) {
-			this.wakeLock = this.powerManager.newWakeLock(p_flags, "PowerManagementPlugin");
+			this.wakeLock = this.powerManager.newWakeLock(p_flags, "sleepWork");
 			try {
 				this.wakeLock.acquire();
 				result = new PluginResult(PluginResult.Status.OK);
 			}
 			catch( Exception e ) {
 				this.wakeLock = null;
-				result = new PluginResult(PluginResult.Status.ERROR,"Can't acquire wake-lock - check your permissions!");
+				result = new PluginResult(PluginResult.Status.ERROR,"Can't enable sleepWork - check your permissions!");
 			}
 		}
 		else {
-			result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION,"WakeLock already active - release first");
+			result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION,"sleepWork already enabled - disable first.");
 		}
 		
 		return result;
