@@ -1,5 +1,5 @@
 /*
- * Copyright Wolfgang Koller (original work: https://github.com/Viras-/cordova-plugin-powermanagement) & Moin Uddin
+ * Copyright Wolfgang Koller (original work: https://github.com/Viras-/cordova-plugin-sleepWork) & Moin Uddin
  * 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ var sleepWork = function() {};
  */
 
 sleepWork.prototype.enable = function(successCallback, failureCallback) {
-    cordova.exec(successCallback, failureCallback, 'SleepWorker', 'acquire');
+    cordova.exec(successCallback, failureCallback, 'sleepWork', 'acquire');
 }
 
 /**
@@ -33,7 +33,7 @@ sleepWork.prototype.enable = function(successCallback, failureCallback) {
  */
 
 sleepWork.prototype.disable = function(successCallback, failureCallback) {
-    cordova.exec(successCallback, failureCallback, 'SleepWorker', 'release');
+    cordova.exec(successCallback, failureCallback, 'sleepWork', 'release');
 }
 
 module.exports = new sleepWork();

@@ -38,7 +38,7 @@ import org.apache.cordova.PluginResult.Status;
 /**
  * Plugin class which does the actual handling
  */
-public class SleepWorker extends CordovaPlugin {
+public class sleepWork extends CordovaPlugin {
 	// As we only allow one wake-lock, we keep a reference to it here
 	private PowerManager.WakeLock wakeLock = null;
 	private PowerManager powerManager = null;
@@ -54,7 +54,7 @@ public class SleepWorker extends CordovaPlugin {
 	}
 	
 	@Override
-	public boolean execute(String action, CallbackContext callbackContext) throws JSONException {
+	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 
 		PluginResult result = null;
 		Log.d("sleepWork", "Plugin execute called - " + this.toString() );
@@ -69,7 +69,7 @@ public class SleepWorker extends CordovaPlugin {
 				result = this.release();
 			}
 		}
-		catch( JSONException e ) {
+		catch( Exception e ) {
 			result = new PluginResult(Status.JSON_EXCEPTION, e.getMessage());
 		}
 		

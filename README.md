@@ -2,11 +2,10 @@ sleepWork
 ===============
 Plugin for Cordova (3.0+)
 
-It'll keep the app working in even if user puts the device to sleep with sleep button.
+It'll keep the app working even if user puts the device to sleep with sleep button.
 It should be used for applications which keep running for a long time without any user interaction.
 
-It simple implements (PARTIAL_WAKE_LOCK):
-* Android: [PowerManager](http://developer.android.com/reference/android/os/PowerManager.html)
+It simply implements (PARTIAL_WAKE_LOCK) of [PowerManager](http://developer.android.com/reference/android/os/PowerManager.html)
 
 
 Availability (currently):
@@ -39,6 +38,14 @@ cordova.plugins.sleepWork.enable(function(){
 	inSleep = true;
 }, function(){
 	console.log('Error in enabling sleepWork.');
+});
+```
+
+```javascript
+cordova.plugins.sleepWork.disable(function(){
+	inSleep = false;
+}, function(){
+	console.log('Error in disabling sleepWork.');
 });
 ```
 
